@@ -7,13 +7,14 @@
     <div class="row">
         <div class="col-lg-6">
             <?= form_error('menu', '<div class="alert alert-danger" role="alert">', '</div>'); ?>
-            <?= $this->session->flashdata('flash'); ?>
+            <div class="flash-data" data-alert="<?= $this->session->flashdata('flash'); ?>"></div>
 
-            <a class="btn btn-primary mb-3" data-toggle="modal" data-target="#newMenuModal">Add New Menu</a>
-            <table class="table table-hover">
+            <a class="btn btn-primary mb-3 buttonAdd" data-toggle="modal" data-target="#newMenuModal"
+                data-url="<?= base_url('menu'); ?>">Add New Menu</a>
+            <table class="table table-hover" id="myTable">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col">id</th>
                         <th scope="col">Menu</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -21,11 +22,13 @@
                 <tbody>
                     <?php foreach ($menu as $m) : ?>
                     <tr>
-                        <th scope="row">#</th>
+                        <td scope="row"><?= $m['id']; ?></td>
                         <td><?= $m['menu']; ?></td>
                         <td>
-                            <a class="badge badge-success" href="">edit</a>
-                            <a class="badge badge-danger" onclick="return confirm('yakin menghapus data ini');"
+                            <a class="badge badge-success buttonEdit" href="javascript:void(0)"
+                                data-url="<?= base_url('menu/editMenu'); ?>" data-toggle="modal"
+                                data-target="#newMenuModal">Edit</a>
+                            <a class="badge badge-danger buttonDelete"
                                 href="<?= base_url('menu/deleteMenu/') . $m['id']; ?>">delete</a>
                         </td>
                     </tr>
@@ -38,6 +41,7 @@
 </div>
 <!-- /.container-fluid -->
 
+
 <!-- Modal -->
 <div class="modal fade" id="newMenuModal" tabindex="-1" role="dialog" aria-labelledby="newMenuModalLabel"
     aria-hidden="true">
@@ -49,7 +53,9 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="<?= base_url('menu'); ?>" method="POST">
+
+            <form action="" method="POST">
+                <input type="text" name="id" id="id" readonly hidden>
                 <div class="modal-body">
                     <div class="form-group">
                         <input type="text" class="form-control" id="menu" name="menu" placeholder="Menu Name">
@@ -57,9 +63,14 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn btn-primary" type="submit">Add</button>
+                    <button class="btn btn-primary" type="submit" name="submit" id="submit" value="add">Add</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- script menu -->
+<?php
+$this->load->view('menu/script_index');
+?>
