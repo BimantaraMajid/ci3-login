@@ -106,4 +106,12 @@ class Auth extends CI_Controller
 
 		redirect('auth');
 	}
+	public function blocked()
+	{
+
+		$data['title'] = 'Access Blocked';
+		$this->load->view('templates/header', $data);
+		$this->load->view('auth/blocked');
+		$this->load->view('templates/footer');
+	}
 }
