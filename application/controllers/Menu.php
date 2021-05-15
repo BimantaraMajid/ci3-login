@@ -3,24 +3,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Menu extends CI_Controller
 {
-    private $dataUser;
+    private $data;
 
     public function __construct()
     {
         parent::__construct();
         is_logged_in();
-        // if (!$this->session->userdata('email') or $this->session->userdata('role_id') != 1) {
-        //     redirect('auth/logout');
-        // }
-        $this->dataUser = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $this->data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->model('Menu_model');
     }
 
     public function index()
     {
+        $data = $this->data;
         $this->db->where('id >', 3);
         $data['menu'] = $this->db->get('user_menu')->result_array();
-        $data['user'] = $this->dataUser;
 
         $this->form_validation->set_rules('menu', 'Menu', 'trim|required');
         if ($this->form_validation->run() == false) {
@@ -75,9 +72,8 @@ class Menu extends CI_Controller
 
     public function subMenu()
     {
-        $data['user'] = $this->dataUser;
+        $data = $this->data;
         $data['title'] = "Submenu Management";
-        $data['user'] = $this->dataUser;
         $data['submenu'] = $this->Menu_model->getSubMenu();
         $data['menu'] = $this->db->get('user_menu')->result_array();
 
